@@ -1,0 +1,117 @@
+{
+  "cards": [
+    {
+      "traits": [
+        "discard_tail"
+      ]
+    },
+    {
+      "traits": [
+        "pasture",
+        "fat_layer"
+      ]
+    },
+    {
+      "traits": [
+        "large_body_mass",
+        "predator"
+      ]
+    },
+    {
+      "traits": [
+        "parasite",
+        "predator"
+      ]
+    },
+    {
+      "traits": [
+        "cooperation",
+        "predator"
+      ]
+    },
+    {
+      "traits": [
+        "cooperation",
+        "fat_layer"
+      ]
+    },
+    {
+      "traits": [
+        "symbiosis"
+      ]
+    },
+    {
+      "traits": [
+        "venomous",
+        "predator"
+      ]
+    },
+    {
+      "traits": [
+        "large_body_mass",
+        "fat_layer"
+      ]
+    },
+    {
+      "traits": [
+        "swimming"
+      ]
+    },
+    {
+      "traits": [
+        "parasite",
+        "fat_layer"
+      ]
+    },
+    {
+      "traits": [
+        "hibernation",
+        "predator"
+      ]
+    },
+    {
+      "traits": [
+        "camouflage",
+        "fat_layer"
+      ]
+    },
+    {
+      "traits": [
+        "quickness"
+      ]
+    },
+    {
+      "traits": [
+        "burrowing",
+        "fat_layer"
+      ]
+    },
+    {
+      "traits": [
+        "piracy"
+      ]
+    },
+    {
+      "traits": [
+        "communication",
+        "predator"
+      ]
+    },
+    {
+      "traits": [
+        "keen_eyesight",
+        "fat_layer"
+      ]
+    },
+    {
+      "traits": [
+        "mimicry"
+      ]
+    },
+    {
+      "traits": [
+        "carrion_feeder"
+      ]
+    }
+  ]
+}
