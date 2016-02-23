@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 
 public class Deck extends Node {
 
+    private static final float CARD_BREADTH = 0.003f;
+
     private List<Card> cards = new ArrayList<>();
 
     public Deck(AssetManager assetManager) throws IOException {
@@ -36,9 +38,11 @@ public class Deck extends Node {
             }
         }
 
+//        Collections.shuffle(cards);
+
         cards.forEach(card -> card.rotate(-FastMath.HALF_PI, 0, 0));
         for (int i = 0; i < cards.size(); i++) {
-            cards.get(i).setLocalTranslation(0, .01f * i, 0);
+            cards.get(i).setLocalTranslation(0, CARD_BREADTH * i, 0);
 
 
             cards.get(i).addControl(new ShuffleControl(i));
@@ -51,27 +55,29 @@ public class Deck extends Node {
 
     private static class ShuffleControl extends AbstractControl {
 
-        private final float delay;
+        private static final float DELAY = 0.3f;
+
+        private final int order;
 
         private float cycle = 0;
 
-        private ShuffleControl(int delay) {
-            this.delay = delay * .3f;
+        private ShuffleControl(int order) {
+            this.order = order;
         }
 
         @Override
         protected void controlUpdate(float tpf) {
             cycle += tpf;
 
-            if (cycle > 10) {
-                cycle -= 10;
+            if (cycle > 20) {
+                cycle -= 20;
             }
 
-            if (cycle > delay && cycle <= delay + FastMath.PI) {
-                getSpatial().setLocalTranslation(FastMath.sin((cycle - delay) * 2), delay * .1f + (1 - FastMath.cos((cycle - delay) * 2)) * .8f, (1 - FastMath.cos((cycle - delay) * 2)) * -.5f);
+            if (cycle > order * DELAY && cycle <= order * DELAY + FastMath.PI) {
+                getSpatial().setLocalTranslation(FastMath.sin((cycle - order * DELAY) * 2), order * CARD_BREADTH + (1 - FastMath.cos((cycle - order * DELAY) * 2)) * .8f, (1 - FastMath.cos((cycle - order * DELAY) * 2)) * -.5f);
                 getSpatial().rotate(0, -tpf * 2, 0);
             } else {
-                getSpatial().setLocalTranslation(0, delay * .1f, 0);
+                getSpatial().setLocalTranslation(0, order * CARD_BREADTH, 0);
                 getSpatial().setLocalRotation(new Quaternion().fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_X));
                 getSpatial().rotate(0, 0, FastMath.PI);
             }
