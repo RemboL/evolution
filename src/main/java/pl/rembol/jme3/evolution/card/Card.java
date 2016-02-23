@@ -119,12 +119,12 @@ public class Card extends Node {
                     current.setText(words.get(i));
                 }
             }
-            
+
         }
-        
+
         textLines.forEach(this::alignText);
         textLines.forEach(sideNode::attachChild);
-        
+
     }
 
     private void alignText(BitmapText text) {

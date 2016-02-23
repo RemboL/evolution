@@ -16,6 +16,7 @@ import pl.rembol.jme3.evolution.deck.json.DeckDTO;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +39,7 @@ public class Deck extends Node {
             }
         }
 
-//        Collections.shuffle(cards);
+        Collections.shuffle(cards);
 
         cards.forEach(card -> card.rotate(-FastMath.HALF_PI, 0, 0));
         for (int i = 0; i < cards.size(); i++) {

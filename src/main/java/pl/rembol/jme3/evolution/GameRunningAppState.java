@@ -14,30 +14,45 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.system.AppSettings;
 import pl.rembol.jme3.evolution.deck.Deck;
+import pl.rembol.jme3.evolution.input.MouseClickListener;
+import pl.rembol.jme3.evolution.phase.Phase;
+import pl.rembol.jme3.evolution.phase.selectplayers.SelectPlayersPhase;
+import pl.rembol.jme3.evolution.player.Player;
 import pl.rembol.jme3.evolution.table.Table;
 
 import java.io.IOException;
+import java.util.List;
 
 public class GameRunningAppState extends AbstractAppState {
 
     int frame = 200;
 
     private AppSettings settings;
+    private SimpleApplication simpleApp;
 
     public GameRunningAppState(AppSettings settings) {
         this.settings = settings;
     }
 
+    private Phase currentPhase;
+
+    private List<Player> playerList;
+
     @Override
     public void update(float tpf) {
         frame++;
-
-
     }
+
+    public void setPlayers(List<Player> players) {
+        playerList = players;
+    }
+
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
-        SimpleApplication simpleApp = (SimpleApplication) app;
+        simpleApp = (SimpleApplication) app;
+
+        new MouseClickListener(simpleApp);
 
         simpleApp.getRootNode().attachChild(new Table(app.getAssetManager()));
 
@@ -50,6 +65,9 @@ public class GameRunningAppState extends AbstractAppState {
         }
 
         initLightAndShadows(simpleApp, app.getViewPort());
+
+        currentPhase = new SelectPlayersPhase();
+        currentPhase.initialize(simpleApp, settings, this);
 
     }
 

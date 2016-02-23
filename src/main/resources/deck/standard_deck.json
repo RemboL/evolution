@@ -4,134 +4,134 @@
       "traits": [
         "discard_tail"
       ],
-      "count" : 4
+      "count": 4
     },
     {
       "traits": [
         "pasture",
         "fat_layer"
       ],
-      "count" : 4
+      "count": 4
     },
     {
       "traits": [
         "large_body_mass",
         "predator"
       ],
-      "count" : 2
+      "count": 2
     },
     {
       "traits": [
         "parasite",
         "predator"
       ],
-      "count" : 4
+      "count": 4
     },
     {
       "traits": [
         "cooperation",
         "predator"
       ],
-      "count" : 4
+      "count": 4
     },
     {
       "traits": [
         "cooperation",
         "fat_layer"
       ],
-      "count" : 4
+      "count": 4
     },
     {
       "traits": [
         "symbiosis"
       ],
-      "count" : 4
+      "count": 4
     },
     {
       "traits": [
         "venomous",
         "predator"
       ],
-      "count" : 4
+      "count": 4
     },
     {
       "traits": [
         "large_body_mass",
         "fat_layer"
       ],
-      "count" : 6
+      "count": 6
     },
     {
       "traits": [
         "swimming"
       ],
-      "count" : 8
+      "count": 8
     },
     {
       "traits": [
         "parasite",
         "fat_layer"
       ],
-      "count" : 4
+      "count": 4
     },
     {
       "traits": [
         "hibernation",
         "predator"
       ],
-      "count" : 4
+      "count": 4
     },
     {
       "traits": [
         "camouflage",
         "fat_layer"
       ],
-      "count" : 4
+      "count": 4
     },
     {
       "traits": [
         "quickness"
       ],
-      "count" : 4
+      "count": 4
     },
     {
       "traits": [
         "burrowing",
         "fat_layer"
       ],
-      "count" : 4
+      "count": 4
     },
     {
       "traits": [
         "piracy"
       ],
-      "count" : 4
+      "count": 4
     },
     {
       "traits": [
         "communication",
         "predator"
       ],
-      "count" : 4
+      "count": 4
     },
     {
       "traits": [
         "keen_eyesight",
         "fat_layer"
       ],
-      "count" : 4
+      "count": 4
     },
     {
       "traits": [
         "mimicry"
       ],
-      "count" : 4
+      "count": 4
     },
     {
       "traits": [
         "carrion_feeder"
       ],
-      "count" : 4
+      "count": 4
     }
   ]
 }

@@ -11,7 +11,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
-public class WindowShade extends Node {
+public class ButtonShade extends Node {
 
     private static Material muchLighterShade;
 
@@ -22,6 +22,8 @@ public class WindowShade extends Node {
     private static Material muchDarkerShade;
 
     private static Material muchMuchDarkerShade;
+
+    private static Material grayShade;
 
     private final AssetManager assetManager;
     private final int width;
@@ -36,7 +38,7 @@ public class WindowShade extends Node {
 
     public static final int FRAME = 20;
 
-    public WindowShade(AssetManager assetManager, int width, int height, int depth) {
+    public ButtonShade(AssetManager assetManager, int width, int height, int depth) {
         this.assetManager = assetManager;
         this.width = width;
         this.height = height;
@@ -53,6 +55,16 @@ public class WindowShade extends Node {
                 new Vector3f(width - FRAME, FRAME, depth),
                 new Vector3f(width - FRAME, height - TOP_FRAME, depth),
                 new Vector3f(FRAME, height - TOP_FRAME, depth));
+    }
+
+    public Spatial initButton(ColorRGBA colorRGBA) {
+        initOuterShades();
+
+        return initShade(initMaterial(colorRGBA),
+                new Vector3f(EDGE, EDGE, depth),
+                new Vector3f(width - EDGE, EDGE, depth),
+                new Vector3f(width - EDGE, height - EDGE, depth),
+                new Vector3f(EDGE, height - EDGE, depth));
     }
 
     public void initBox(Vector2f start, Vector2f end, boolean convex) {
@@ -108,7 +120,7 @@ public class WindowShade extends Node {
                 false);
     }
 
-    public void initShade(Material material, Vector3f vertex1, Vector3f vertex2, Vector3f vertex3, Vector3f vertex4) {
+    public Spatial initShade(Material material, Vector3f vertex1, Vector3f vertex2, Vector3f vertex3, Vector3f vertex4) {
         Spatial spatial = new Geometry("shade", new QuadrangleMesh(vertex1, vertex2, vertex3, vertex4));
         spatial.setQueueBucket(RenderQueue.Bucket.Gui);
         spatial.setCullHint(CullHint.Never);
@@ -116,6 +128,7 @@ public class WindowShade extends Node {
         spatial.setMaterial(material);
 
         attachChild(spatial);
+        return spatial;
     }
 
     private Material initMaterial(ColorRGBA colorRGBA) {
@@ -163,6 +176,14 @@ public class WindowShade extends Node {
         }
 
         return muchMuchDarkerShade;
+    }
+
+    private Material getGrayShade() {
+        if (grayShade == null) {
+            grayShade = initMaterial(new ColorRGBA(.5F, .5F, .5F, .4F));
+        }
+
+        return grayShade;
     }
 
 }
