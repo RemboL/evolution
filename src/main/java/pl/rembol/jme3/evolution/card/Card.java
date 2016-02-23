@@ -12,8 +12,11 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
+import org.apache.commons.lang3.StringUtils;
 import pl.rembol.jme3.evolution.traits.Trait;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Card extends Node {
@@ -86,28 +89,60 @@ public class Card extends Node {
         sideNode.attachChild(foodGeometry);
     }
 
-    private void addHeaderText(Node sideNode, String... texts) {
+    private void addHeaderText(Node sideNode, String text) {
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.Blue);
 
         BitmapFont guiFont = assetManager.loadFont("texts/Default.fnt");
 
+        List<String> words = Arrays.asList(text.split(" "));
 
-        for (int i = 0; i < texts.length; ++i) {
-            BitmapText textLine = new BitmapText(guiFont);
-            textLine.setSize(.1f);
-            textLine.setText(texts[i]);
-            textLine.setColor(ColorRGBA.Black);
-            textLine.setShadowMode(RenderQueue.ShadowMode.Off);
+        int line = 0;
+        List<BitmapText> textLines = new ArrayList<>();
+        BitmapText current = createTextLine(guiFont, 0);
+        textLines.add(current);
+        for (int i = 0; i < words.size(); ++i) {
+            String previousTextInLine = current.getText();
 
-            if (textLine.getLineWidth() > .4) {
-                textLine.scale(.4f / textLine.getLineWidth(), 1, 1);
-                textLine.setLocalTranslation(-.2f, .44f - i * .1f, .002f);
+            if (StringUtils.isEmpty(previousTextInLine)) {
+                current.setText(words.get(i));
             } else {
-                textLine.setLocalTranslation(-textLine.getLineWidth() / 2, .44f - i * .1f, .002f);
+                current.setText(previousTextInLine + " " + words.get(i));
             }
-            sideNode.attachChild(textLine);
+
+            if (current.getLineWidth() > .6) {
+                if (!previousTextInLine.isEmpty()) {
+                    current.setText(previousTextInLine);
+                    line++;
+                    current = createTextLine(guiFont, line);
+                    textLines.add(current);
+                    current.setText(words.get(i));
+                }
+            }
+            
         }
+        
+        textLines.forEach(this::alignText);
+        textLines.forEach(sideNode::attachChild);
+        
+    }
+
+    private void alignText(BitmapText text) {
+        if (text.getLineWidth() > .4) {
+            text.scale(.4f / text.getLineWidth(), 1, 1);
+            text.setLocalTranslation(-.2f, text.getLocalTranslation().y, text.getLocalTranslation().z);
+        } else {
+            text.setLocalTranslation(-text.getLineWidth() / 2, text.getLocalTranslation().y, text.getLocalTranslation().z);
+        }
+    }
+
+    private BitmapText createTextLine(BitmapFont guiFont, int line) {
+        BitmapText textLine = new BitmapText(guiFont);
+        textLine.setSize(.1f);
+        textLine.setColor(ColorRGBA.Black);
+        textLine.setShadowMode(RenderQueue.ShadowMode.Off);
+        textLine.setLocalTranslation(0, .44f - line * .1f, .002f);
+        return textLine;
     }
 
     private Geometry createBack() {
