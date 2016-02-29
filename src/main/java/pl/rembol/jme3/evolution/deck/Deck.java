@@ -5,10 +5,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
-import com.jme3.scene.control.AbstractControl;
 import org.apache.commons.io.IOUtils;
 import pl.rembol.jme3.evolution.card.Card;
 import pl.rembol.jme3.evolution.deck.json.CardDTO;
@@ -41,54 +38,27 @@ public class Deck extends Node {
 
         Collections.shuffle(cards);
 
-        cards.forEach(card -> card.rotate(-FastMath.HALF_PI, 0, 0));
+        setLocalRotation(new Quaternion().fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_X));
+
         for (int i = 0; i < cards.size(); i++) {
-            cards.get(i).setLocalTranslation(0, CARD_BREADTH * i, 0);
-
-
-            cards.get(i).addControl(new ShuffleControl(i));
-
+            cards.get(i).setLocalTranslation(0,  0, CARD_BREADTH * i);
         }
-
         cards.forEach(this::attachChild);
 
     }
 
-    private static class ShuffleControl extends AbstractControl {
-
-        private static final float DELAY = 0.3f;
-
-        private final int order;
-
-        private float cycle = 0;
-
-        private ShuffleControl(int order) {
-            this.order = order;
+    public Card removeCard() {
+        if (cards.isEmpty()) {
+            return null;
         }
+        Card card = cards.get(cards.size() - 1);
+        cards.remove(card);
+        return card;
 
-        @Override
-        protected void controlUpdate(float tpf) {
-            cycle += tpf;
+    }
 
-            if (cycle > 20) {
-                cycle -= 20;
-            }
-
-            if (cycle > order * DELAY && cycle <= order * DELAY + FastMath.PI) {
-                getSpatial().setLocalTranslation(FastMath.sin((cycle - order * DELAY) * 2), order * CARD_BREADTH + (1 - FastMath.cos((cycle - order * DELAY) * 2)) * .8f, (1 - FastMath.cos((cycle - order * DELAY) * 2)) * -.5f);
-                getSpatial().rotate(0, -tpf * 2, 0);
-            } else {
-                getSpatial().setLocalTranslation(0, order * CARD_BREADTH, 0);
-                getSpatial().setLocalRotation(new Quaternion().fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_X));
-                getSpatial().rotate(0, 0, FastMath.PI);
-            }
-
-        }
-
-        @Override
-        protected void controlRender(RenderManager rm, ViewPort vp) {
-
-        }
+    public boolean isEmpty() {
+        return cards.isEmpty();
     }
 
 }

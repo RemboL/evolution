@@ -3,10 +3,12 @@ package pl.rembol.jme3.evolution.phase.selectplayers;
 import com.jme3.app.SimpleApplication;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
+import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import pl.rembol.jme3.evolution.GameRunningAppState;
 import pl.rembol.jme3.evolution.gui.BackScreen;
 import pl.rembol.jme3.evolution.phase.Phase;
+import pl.rembol.jme3.evolution.phase.dealcards.DealCardsPhase;
 import pl.rembol.jme3.evolution.player.Player;
 
 import java.util.ArrayList;
@@ -26,12 +28,18 @@ public class SelectPlayersPhase extends Phase {
     private AddPlayerButton addPlayerButton;
     private FinishButton finishButton;
 
+    private Node playerPhaseNode;
+
     @Override
     public void initialize(SimpleApplication simpleApp, AppSettings settings, GameRunningAppState gameRunningAppState) {
         this.simpleApp = simpleApp;
         this.settings = settings;
         this.gameRunningAppState = gameRunningAppState;
-        simpleApp.getGuiNode().attachChild(new BackScreen(simpleApp.getAssetManager(), settings, new ColorRGBA(0f, 0f, 0f, .9f)));
+
+        playerPhaseNode = new Node("Select Players Phase");
+        simpleApp.getGuiNode().attachChild(playerPhaseNode);
+
+        playerPhaseNode.attachChild(new BackScreen(simpleApp.getAssetManager(), settings, new ColorRGBA(0f, 0f, 0f, .9f)));
         finishButton = initFinishButton();
 
         for (int i = 0; i < MIN_PLAYERS; ++i) {
@@ -43,7 +51,7 @@ public class SelectPlayersPhase extends Phase {
 
     private void removeAddPlayerButton() {
         if (addPlayerButton != null) {
-            simpleApp.getGuiNode().detachChild(addPlayerButton);
+            playerPhaseNode.detachChild(addPlayerButton);
             addPlayerButton = null;
         }
     }
@@ -55,7 +63,7 @@ public class SelectPlayersPhase extends Phase {
 
         addPlayerButton = new AddPlayerButton(simpleApp.getAssetManager(), this);
         addPlayerButton.setLocalTranslation(settings.getWidth() / 2 - 220, 500 - playerPanels.size() * 64, 1);
-        simpleApp.getGuiNode().attachChild(addPlayerButton);
+        playerPhaseNode.attachChild(addPlayerButton);
     }
 
     private void invalidatePlayerPanels() {
@@ -72,10 +80,10 @@ public class SelectPlayersPhase extends Phase {
         }
 
         if (finishButton.getParent() != null) {
-            simpleApp.getGuiNode().detachChild(finishButton);
+            playerPhaseNode.detachChild(finishButton);
         }
         if (playerPanels.size() <= MAX_PLAYERS && playerPanels.size() >= MIN_PLAYERS) {
-            simpleApp.getGuiNode().attachChild(finishButton);
+            playerPhaseNode.attachChild(finishButton);
         }
     }
 
@@ -83,14 +91,14 @@ public class SelectPlayersPhase extends Phase {
         List<ColorRGBA> availableColors = getAvailableColors();
 
         PlayerPanel playerPanel = new PlayerPanel(simpleApp.getAssetManager(), this, availableColors.get(FastMath.nextRandomInt(0, availableColors.size() - 1)));
-        simpleApp.getGuiNode().attachChild(playerPanel);
+        playerPhaseNode.attachChild(playerPanel);
         playerPanels.add(playerPanel);
 
         invalidatePlayerPanels();
     }
 
     void remove(PlayerPanel playerPanel) {
-        simpleApp.getGuiNode().detachChild(playerPanel);
+        playerPhaseNode.detachChild(playerPanel);
         playerPanels.remove(playerPanel);
 
         invalidatePlayerPanels();
@@ -123,6 +131,10 @@ public class SelectPlayersPhase extends Phase {
     }
 
     void finish() {
-        gameRunningAppState.setPlayers(playerPanels.stream().map(playerPanel -> new Player(playerPanel.getColor())).collect(Collectors.toList()));
+        gameRunningAppState.setPlayers(playerPanels.stream().map(playerPanel -> new Player(gameRunningAppState, playerPanel.getColor())).collect(Collectors.toList()));
+        playerPhaseNode.getParent().detachChild(playerPhaseNode);
+
+        new DealCardsPhase().initialize(simpleApp, settings, gameRunningAppState);
+
     }
 }

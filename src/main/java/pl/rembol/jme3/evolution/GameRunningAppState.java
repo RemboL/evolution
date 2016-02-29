@@ -38,6 +38,8 @@ public class GameRunningAppState extends AbstractAppState {
 
     private List<Player> playerList;
 
+    private Deck deck;
+
     @Override
     public void update(float tpf) {
         frame++;
@@ -57,7 +59,7 @@ public class GameRunningAppState extends AbstractAppState {
         simpleApp.getRootNode().attachChild(new Table(app.getAssetManager()));
 
         try {
-            Deck deck = new Deck(app.getAssetManager());
+            deck = new Deck(app.getAssetManager());
             deck.setLocalTranslation(0, 0, -.5f);
             simpleApp.getRootNode().attachChild(deck);
         } catch (IOException e) {
@@ -96,4 +98,15 @@ public class GameRunningAppState extends AbstractAppState {
         viewPort.addProcessor(fpp);
     }
 
+    public SimpleApplication simpleApplication() {
+        return simpleApp;
+    }
+
+    public List<Player> getPlayers() {
+        return playerList;
+    }
+
+    public Deck deck() {
+        return deck;
+    }
 }

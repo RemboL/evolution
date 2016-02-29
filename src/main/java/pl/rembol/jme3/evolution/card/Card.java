@@ -7,6 +7,8 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -38,6 +40,7 @@ public class Card extends Node {
             initTrait(lowerSide, traits.get(1));
         }
 
+        addControl(new MovementControl());
     }
 
     private void initTrait(Node sideNode, Trait trait) {
@@ -185,5 +188,14 @@ public class Card extends Node {
         return cardMaterial;
     }
 
+    public void setTargetLocation(Vector3f v2, Vector3f v3, Vector3f v4, Quaternion r2, float pathTime) {
+        MovementControl control = getControl(MovementControl.class);
+        if (control != null) {
+            control.setMovement(v2, v3, v4, r2, pathTime);
+        } else {
+            setLocalTranslation(v4);
+            setLocalRotation(r2);
+        }
+    }
 
 }
