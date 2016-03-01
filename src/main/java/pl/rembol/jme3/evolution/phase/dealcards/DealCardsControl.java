@@ -10,7 +10,7 @@ import pl.rembol.jme3.evolution.player.Player;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class DealCardsControl extends AbstractControl {
+class DealCardsControl extends AbstractControl {
 
     private static final float DELAY = .4f;
 
@@ -40,7 +40,7 @@ public class DealCardsControl extends AbstractControl {
         }
 
         if (deck.isEmpty() || dealingQueue.isEmpty()) {
-            getSpatial().getParent().detachChild(getSpatial());
+            getSpatial().removeControl(this);
         }
     }
 

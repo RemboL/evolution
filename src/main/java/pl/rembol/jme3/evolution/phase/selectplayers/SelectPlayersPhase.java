@@ -3,6 +3,8 @@ package pl.rembol.jme3.evolution.phase.selectplayers;
 import com.jme3.app.SimpleApplication;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import pl.rembol.jme3.evolution.GameRunningAppState;
@@ -20,6 +22,8 @@ public class SelectPlayersPhase extends Phase {
     private static final int MIN_PLAYERS = 2;
 
     private static final int MAX_PLAYERS = 4;
+
+    private static final float HANDS_DISTANCE = 3f;
 
     private List<PlayerPanel> playerPanels = new ArrayList<>();
     private SimpleApplication simpleApp;
@@ -131,7 +135,25 @@ public class SelectPlayersPhase extends Phase {
     }
 
     void finish() {
-        gameRunningAppState.setPlayers(playerPanels.stream().map(playerPanel -> new Player(gameRunningAppState, playerPanel.getColor())).collect(Collectors.toList()));
+        List<Player> playerList = new ArrayList<>();
+
+        for (int i = 0; i < playerPanels.size(); ++i) {
+            Player player = new Player(gameRunningAppState, playerPanels.get(i).getColor());
+
+            float angle = FastMath.TWO_PI * i / playerPanels.size();
+            float cos = FastMath.cos(angle);
+            float sin = FastMath.sin(angle);
+
+
+            player.initHand(
+                    new Vector3f(cos * HANDS_DISTANCE, .01f, sin * HANDS_DISTANCE),
+                    new Quaternion().fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_X)
+                            .mult(new Quaternion().fromAngleAxis(-angle - FastMath.HALF_PI, Vector3f.UNIT_Z)));
+
+            playerList.add(player);
+        }
+
+        gameRunningAppState.setPlayers(playerList);
         playerPhaseNode.getParent().detachChild(playerPhaseNode);
 
         new DealCardsPhase().initialize(simpleApp, settings, gameRunningAppState);
